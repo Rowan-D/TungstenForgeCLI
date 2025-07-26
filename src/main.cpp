@@ -3,9 +3,9 @@
 int main(int argc, char** argv)
 {
     wUtils::TungstenLogger logger;
-    if (argc > 4)
+    if (argc != 4)
     {
-        logger.LogWarning("Expected 4 Arguments: projectPath, ");
+        logger.LogWarning("Expected 4 Arguments");
         return 1;
     }
 

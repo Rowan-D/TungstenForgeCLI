@@ -28,7 +28,7 @@ configure_file(
 )
 
 # Add TungstenForge
-add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/external/TungstenForge)
+add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/external/TungstenForge EXCLUDE_FROM_ALL)
 
 add_executable(TungstenForgeCLI
     src/main.cpp
@@ -52,11 +52,18 @@ install(TARGETS TungstenForgeCLI
     RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
 )
 
+# Create wforge -> tungstenforge symlink
 install(CODE "
+    set(_bin_dir \"\$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_BINDIR}\")
+    file(MAKE_DIRECTORY \"\${_bin_dir}\")
+    message(STATUS \"Creating symlink: \${_bin_dir}/wforge -> tungstenforge\")
     execute_process(
         COMMAND \"${CMAKE_COMMAND}\" -E create_symlink tungstenforge wforge
-        WORKING_DIRECTORY \"{CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_BINDIR}\"
+        WORKING_DIRECTORY \"\${_bin_dir}\"
     )
+    if(NOT IS_SYMLINK \"\${_bin_dir}/wforge\")
+        message(SEND_ERROR \"Failed to create symlink: \${_bin_dir}/wforge\")
+    endif()
 ")
 
 # Uninstall logic
