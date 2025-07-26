@@ -34,9 +34,9 @@ add_executable(TungstenForgeCLI
     src/main.cpp
 )
 
-target_compile_features(TungstenCore PUBLIC cxx_std_20)
+target_compile_features(TungstenForgeCLI PUBLIC cxx_std_20)
 
-target_link_libraries(TungstenForgeCLI PUBLIC TungstenForgeCLI)
+target_link_libraries(TungstenForgeCLI PUBLIC TungstenForge)
 
 set_target_properties(TungstenForgeCLI PROPERTIES
     OUTPUT_NAME "tungstenforge"
