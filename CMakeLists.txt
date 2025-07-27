@@ -28,7 +28,7 @@ configure_file(
 )
 
 # Add TungstenForge
-add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/external/TungstenForge EXCLUDE_FROM_ALL)
+add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/external/TungstenForge)
 
 add_executable(TungstenForgeCLI
     src/main.cpp
