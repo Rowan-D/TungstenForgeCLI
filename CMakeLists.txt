@@ -29,6 +29,9 @@ configure_file(
 
 # Add TungstenForge
 add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/external/TungstenForge)
+# Add CLI11
+set(CLI11_INSTALL OFF CACHE BOOL "Disable CLI11 install target")
+add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/external/CLI11)
 
 add_executable(TungstenForgeCLI
     src/main.cpp
@@ -36,7 +39,10 @@ add_executable(TungstenForgeCLI
 
 target_compile_features(TungstenForgeCLI PUBLIC cxx_std_20)
 
-target_link_libraries(TungstenForgeCLI PUBLIC TungstenForge)
+target_link_libraries(TungstenForgeCLI PRIVATE
+    TungstenForge
+    CLI11::CLI11
+)
 
 set_target_properties(TungstenForgeCLI PROPERTIES
     OUTPUT_NAME "tungstenforge"

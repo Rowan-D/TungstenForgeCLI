@@ -1,3 +1,6 @@
 [submodule "external/TungstenForge"]
 	path = external/TungstenForge
 	url = https://github.com/Rowan-D/TungstenForge.git
+[submodule "external/CLI11"]
+	path = external/CLI11
+	url = https://github.com/CLIUtils/CLI11.git
