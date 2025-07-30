@@ -5,32 +5,42 @@ int main(int argc, char** argv)
 {
     CLI::App app{"TungstenForgeCLI"};
 
-    std::string workspace, project, engine, intermediate, build_dir;
+    std::string workspacePath, projectPath, engineDir, intermediateDir, buildDir;
 
-    auto workspace_cmd = app.add_subcommand("workspace", "Setup workspace");
-    workspace_cmd->add_option("-W,--workspace", workspace, "Path to workspace")->required();
-    workspace_cmd->add_option("-P,--project", project, "Path to project")->required();
+    auto workspaceCommand = app.add_subcommand("workspace", "Setup workspace");
+    workspaceCommand->add_option("-W,--workspace", workspacePath, "Path to workspace")->required();
+    workspaceCommand->add_option("-P,--project", projectPath, "Path to project")->required();
 
-    // Subcommand: build
-    auto build_cmd = app.add_subcommand("build", "Build project");
-
-    build_cmd->add_option("-W,--workspace", workspace, "Path to workspace");
-    build_cmd->add_option("-P,--project", project, "Path to project");
-    build_cmd->add_option("-E,--engine", engine, "Path to engine directory");
-    build_cmd->add_option("-I,--intermediate", intermediate, "Path to intermediate directory");
-    build_cmd->add_option("-B,--build", build_dir, "final output directory");
+    auto buildCommand = app.add_subcommand("build", "Build project");
+    buildCommand->add_option("-W,--workspace", workspacePath, "Path to workspace");
+    buildCommand->add_option("-P,--project", projectPath, "Path to project");
+    buildCommand->add_option("-E,--engine", engineDir, "Path to engine directory");
+    buildCommand->add_option("-I,--intermediate", intermediateDir, "Path to intermediate directory");
+    buildCommand->add_option("-B,--build", buildDir, "final output directory");
 
     CLI11_PARSE(app, argc, argv);
 
-    const std::filesystem::path projectPath = argv[1];
-    const std::filesystem::path wCoreSourceDir = argv[2];
-    const std::filesystem::path intDir = argv[3];
-    const std::filesystem::path outputDir = argv[4];
-
     wForge::TungstenForge tungstenForge;
-    if (*workspace_cmd) {
-    } else if (*build_cmd) {
-        return !tungstenForge.BuildProject(projectPath, wCoreSourceDir, intDir, outputDir);
-    }
+    tungstenForge.SetWorkspacePath(workspacePath);
+    tungstenForge.SetProjectPath(projectPath);
+    tungstenForge.SetEngineDir(engineDir);
+    tungstenForge.SetIntDir(intermediateDir);
+    tungstenForge.SetBuildDir(buildDir);
 
+    if (*workspaceCommand)
+    {
+        return 0;
+    }
+    if (*buildCommand)
+    {
+        return !tungstenForge.BuildProject();
+    }
+    std::cout << "TungstenForgeCLI is a command line application for running TungstenForge. Usage:\n\n";
+
+    std::cout << "  wforge workspace -W <workspace-path> -P <project-path>\n";
+    std::cout << "  wforge build -W <workspace-path>\n";
+    std::cout << "  wforge build -P <project-path> -E <engine-dir> -I <int-dir> -B <build-dir>\n\n";
+
+    std::cout << "Run 'wforge --help' For more information." << std::endl;
+    return 0;
 }
